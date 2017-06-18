@@ -10,6 +10,7 @@ gem 'coffee-rails',   '4.2.1'
 gem 'jquery-rails',   '4.1.1'
 gem 'turbolinks',     '5.0.1'
 gem 'jbuilder',       '2.4.1'
+gem 'faker',          '1.7.3'
 
 
 group :development, :test do
