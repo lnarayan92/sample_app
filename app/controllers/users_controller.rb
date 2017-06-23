@@ -11,7 +11,13 @@ class UsersController < ApplicationController
 
   def show
 
-    @user = User.find(params[:id])
+    if User.find(params[:id]).activated?
+      @user = User.find(params[:id])
+    else
+      flash[:warning] = "User is not yet activated. User will be visible after account activation"
+      redirect_to users_path
+    end
+
 
   end
 
@@ -23,9 +29,12 @@ class UsersController < ApplicationController
 
     @user = User.new(user_params)
     if @user.save
-      log_in @user
-      flash[:success] = "Welcome to the Sample App!"
-      redirect_to @user
+      @user.send_activation_email
+      flash[:success] = "Please check your mail to activate your account"
+      redirect_to root_url
+      #log_in @user
+      #flash[:success] = "Welcome to the Sample App!"
+      #redirect_to @user
     else
       render 'new'
     end
