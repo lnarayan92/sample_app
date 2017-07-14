@@ -13,12 +13,17 @@ class UsersController < ApplicationController
 
     if User.find(params[:id]).activated?
       @user = User.find(params[:id])
+      @microposts = @user.microposts.paginate(page: params[:page])
     else
       flash[:warning] = "User is not yet activated. User will be visible after account activation"
       redirect_to users_path
     end
 
 
+  end
+
+  def feed
+    Micropost.where("user_id = ?", id)
   end
 
   def index
@@ -58,14 +63,6 @@ class UsersController < ApplicationController
       render 'edit'
     end
 
-  end
-
-  def logged_in_user
-    unless logged_in?
-      store_location
-      flash[:danger] = "Please log in"
-      redirect_to login_url
-    end
   end
 
   def correct_user
